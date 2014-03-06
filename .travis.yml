@@ -1,27 +1,13 @@
-# Based on https://github.com/Jorge-C/ordination/blob/master/.travis.yml
 language: python
 python:
   - "2.7"
   - "3.3"
 notifications:
   email: false
-# Setup anaconda
 before_install:
-  - wget http://repo.continuum.io/miniconda/Miniconda-2.2.2-Linux-x86_64.sh -O miniconda.sh
-  - chmod +x miniconda.sh
-  - ./miniconda.sh -b
-  - export PATH=/home/travis/anaconda/bin:$PATH
-  # Update conda itself
-  - conda update --yes conda
-  # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
-  - sudo rm -rf /dev/shm
-  - sudo ln -s /run/shm /dev/shm
-# Install packages
+  - sudo apt-get install libhdf5-serial-dev netcdf-bin libnetcdf-dev
+  - pip install numpy cython dateutil
 install:
-  - conda create --yes -n testenv python=$TRAVIS_PYTHON_VERSION numpy cython dateutil netCDF4 pip
-  - source activate testenv
-  - pip uninstall --yes netCDF4
   - pip install .
-# Run test
 script:
   - python -m unittest discover . 'tst*py'
